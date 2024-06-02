@@ -27,5 +27,5 @@ This project is designed to monitor and manage the status of injection mold part
 - Install ESP-IDF (Espressif IoT Development Framework)
 - Set up the development environment as per the ESP-IDF documentation
 
-### Project Structure
+
 
