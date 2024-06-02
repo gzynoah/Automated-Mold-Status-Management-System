@@ -51,7 +51,7 @@ void handle_json_data(const char *json_data, const char *part_no, gpio_num_t fre
         return;
     }
 
-    // Navigate to the "Injection plastique" object
+   
     cJSON *injection_plastique = cJSON_GetObjectItem(root, "Injection plastique ");
     if (injection_plastique == NULL) {
         ESP_LOGE(TAG, "Failed to find 'Injection plastique' in JSON data");
@@ -59,7 +59,7 @@ void handle_json_data(const char *json_data, const char *part_no, gpio_num_t fre
         return;
     }
 
-    // Navigate to the specific part number
+ 
     cJSON *part = cJSON_GetObjectItem(injection_plastique, part_no);
     if (part == NULL) {
         ESP_LOGE(TAG, "Failed to find part number '%s' in JSON data", part_no);
@@ -67,7 +67,7 @@ void handle_json_data(const char *json_data, const char *part_no, gpio_num_t fre
         return;
     }
 
-    // Get the "Status" field for the specific part number
+
     cJSON *status = cJSON_GetObjectItem(part, "Status");
     if (status == NULL || !cJSON_IsString(status)) {
         ESP_LOGE(TAG, "Failed to find 'Status' for part number '%s' in JSON data", part_no);
@@ -76,7 +76,7 @@ void handle_json_data(const char *json_data, const char *part_no, gpio_num_t fre
     }
     init_gpio(freePin, stoppedPin, UnderRepair);
 
-    // Set GPIO pins based on the status
+
     if (strcmp(status->valuestring, "Free") == 0) {
         gpio_set_level(freePin, 1);
         gpio_set_level(stoppedPin, 0);
@@ -105,7 +105,7 @@ void handle_json_data(const char *json_data, const char *part_no, gpio_num_t fre
 }
 
 
-// HTTP POST request handler
+
 esp_err_t post_handler(httpd_req_t *req) {
     char buf[100];
     int ret, remaining = req->content_len;
@@ -117,8 +117,7 @@ esp_err_t post_handler(httpd_req_t *req) {
         return ESP_FAIL;
     }
 
-    // Read body data
-    char* body_ptr = body; // Use a pointer to the start of the body buffer
+    char* body_ptr = body; 
     while (remaining > 0) {
         ret = httpd_req_recv(req, buf, MIN(remaining, sizeof(buf)));
         if (ret <= 0) {
@@ -133,25 +132,23 @@ esp_err_t post_handler(httpd_req_t *req) {
         body_ptr += ret;
         remaining -= ret;
     }
-    *body_ptr = '\0'; // Null-terminate the body string
+    *body_ptr = '\0';
 
-    // Process received JSON data
     ESP_LOGI(TAG, "Received JSON data: %s", body);
     handle_json_data(body,"01 041 335 20", 12, 14, 16);
     handle_json_data(body,"123 501 00 00", 18, 20, 22);
 
 
     
-    // Send response
+   
     httpd_resp_send(req, "Data received successfully", HTTPD_RESP_USE_STRLEN);
 
-    // Free memory
     free(body);
     
     return ESP_OK;
 }
 
-// HTTP server initialization
+
 httpd_handle_t start_webserver(void) {
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     httpd_handle_t server = NULL;
@@ -188,13 +185,13 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base, int32_t e
     }
 }
 
-// Wi-Fi initialization
+
 void wifi_init(void) {
     ESP_LOGI(TAG, "Starting...");
 
     if (!is_event_loop_created) {
         ESP_ERROR_CHECK(esp_event_loop_create_default());
-        is_event_loop_created = true;  // Set the flag to true after creating the event loop
+        is_event_loop_created = true; 
     }
     ESP_ERROR_CHECK(esp_netif_init());
     esp_netif_create_default_wifi_sta();
