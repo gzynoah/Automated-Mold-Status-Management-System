@@ -8,7 +8,6 @@ import time
 
 def send_data_to_esp32(json_data):
     
-    # ESP32 server URL
     esp32_url = "http://172.17.8.33/receive_data"
 
     try:
@@ -21,9 +20,9 @@ def send_data_to_esp32(json_data):
     except Exception as e:
         print(f"An error occurred while sending JSON data to ESP32: {str(e)}")
 
-# Main function to continuously read Excel and send data to ESP32 every 10 seconds
+
 def main():
-    # Decrypt the workbook
+    
     workbook_path = r'Suivi_des_Moules.xlsx'
     password = 'Gree123'
 
@@ -44,7 +43,7 @@ def main():
             if target_sheet in workbook.sheetnames:
                 worksheet = workbook[target_sheet]
                 
-                # Initialize sheet_data dictionary
+                
                 sheet_data = {}
                 
                 for row in worksheet.iter_rows(min_row=2, min_col=2, max_col=6):
